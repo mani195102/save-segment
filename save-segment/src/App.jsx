@@ -63,7 +63,7 @@ function App() {
     };
 
     try {
-      const response = await fetch(netlifyFetch, {
+      const response = await fetch( /.netlify/functions/sendWebhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
