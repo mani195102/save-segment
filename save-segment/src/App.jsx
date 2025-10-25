@@ -15,6 +15,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import netlifyFetch from "../../save-segment/netlify/functions/sendWebhook"
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -62,7 +63,7 @@ function App() {
     };
 
     try {
-      const response = await fetch(webhookURL, {
+      const response = await fetch(netlifyFetch, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
