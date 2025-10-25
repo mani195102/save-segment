@@ -191,7 +191,7 @@ function App() {
                   onChange={(e) => setSelectedSchema(e.target.value)}
                 >
                   <MenuItem value="">
-                    <em>-- Select schema --</em>
+                    <em>-- Select the schema --</em>
                   </MenuItem>
                   {availableSchemas.map((s) => (
                     <MenuItem key={s.value} value={s.value}>
