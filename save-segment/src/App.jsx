@@ -13,17 +13,17 @@ import {
   MenuItem,
   Stack,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import netlifyFetch from "../../save-segment/netlify/functions/sendWebhook"
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [segmentName, setSegmentName] = useState("");
   const [selectedSchema, setSelectedSchema] = useState("");
   const [schemaDropdowns, setSchemaDropdowns] = useState([]);
-
-  const webhookURL = "https://webhook.site/49231acb-36d1-4d93-8678-38109caae1f1";
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const allSchemas = [
     { label: "First Name", value: "first_name" },
@@ -63,18 +63,22 @@ function App() {
     };
 
     try {
-      const response = await fetch( "/.netlify/functions/sendWebhook", {
+      const response = await fetch("/.netlify/functions/sendWebhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        alert("Segment saved successfully!");
-        setIsSidebarOpen(false);
+        setOpenSnackbar(true); // ✅ show success popup
         setSegmentName("");
         setSchemaDropdowns([]);
         setSelectedSchema("");
+
+        // ✅ Close sidebar automatically after 1 second
+        setTimeout(() => {
+          setIsSidebarOpen(false);
+        }, 1000);
       } else {
         alert("Error sending data!");
       }
@@ -99,16 +103,36 @@ function App() {
         bgcolor: "grey.100",
       }}
     >
-    <Button
-    variant="contained"
-    size="large"
-    sx={{ bgcolor: "#49b394", color: "#fff", "&:hover": { bgcolor: "#43a047" } }}
-    onClick={() => setIsSidebarOpen(true)}
-  >
-    Save Segment
-  </Button>
+      <Button
+        variant="contained"
+        size="large"
+        sx={{
+          bgcolor: "#49b394",
+          color: "#fff",
+          "&:hover": { bgcolor: "#43a047" },
+        }}
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        Save Segment
+      </Button>
 
-      {/* Right Side Drawer */}
+      {/* ✅ Snackbar popup */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Segment saved successfully!
+        </Alert>
+      </Snackbar>
+
+      {/* Sidebar Drawer */}
       <Drawer
         anchor="right"
         open={isSidebarOpen}
@@ -144,10 +168,10 @@ function App() {
             />
 
             <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
-              To save your segements ,Add schemas to build the query:
+              To save your segments, add schemas to build the query:
             </Typography>
 
-            <Paper variant="outlined" sx={{ mt: 1, p: 2, bgcolor: "blue.50" }}>
+            <Paper variant="outlined" sx={{ mt: 1, p: 2 }}>
               {schemaDropdowns.map((value, index) => {
                 const options = allSchemas.filter(
                   (s) => !schemaDropdowns.includes(s.value) || s.value === value
@@ -204,7 +228,12 @@ function App() {
               <Button
                 variant="text"
                 size="small"
-                sx={{ mt: 1, color: "#49b394", textDecoration: "underline", "&:hover": { bgcolor: "transparent" } }}
+                sx={{
+                  mt: 1,
+                  color: "#49b394",
+                  textDecoration: "underline",
+                  "&:hover": { bgcolor: "transparent" },
+                }}
                 onClick={handleAddDropdown}
               >
                 + Add new schema
