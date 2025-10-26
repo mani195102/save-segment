@@ -70,15 +70,15 @@ function App() {
       });
 
       if (response.ok) {
-        setOpenSnackbar(true); // ✅ show success popup
+        setOpenSnackbar(true); 
         setSegmentName("");
         setSchemaDropdowns([]);
         setSelectedSchema("");
 
-        // ✅ Close sidebar automatically after 1 second
+      
         setTimeout(() => {
           setIsSidebarOpen(false);
-        }, 1000);
+        }, 1500);
       } else {
         alert("Error sending data!");
       }
@@ -116,7 +116,7 @@ function App() {
         Save Segment
       </Button>
 
-      {/* ✅ Snackbar popup */}
+    
       <Snackbar
         open={openSnackbar}
         autoHideDuration={1000}
@@ -132,7 +132,7 @@ function App() {
         </Alert>
       </Snackbar>
 
-      {/* Sidebar Drawer */}
+     
       <Drawer
         anchor="right"
         open={isSidebarOpen}
@@ -147,14 +147,14 @@ function App() {
             justifyContent: "space-between",
           }}
         >
-          {/* Header */}
+      
           <Box sx={{ bgcolor: "#38afbb", p: 2 }}>
             <Typography variant="h6" sx={{ color: "#fff" }}>
               Save Segment
             </Typography>
           </Box>
 
-          {/* Content */}
+        
           <Box sx={{ p: 3, overflowY: "auto", flex: 1 }}>
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
               Enter the name of the segment:
@@ -241,7 +241,7 @@ function App() {
             </Paper>
           </Box>
 
-          {/* Footer Buttons */}
+       
           <Box sx={{ p: 3 }}>
             <Stack direction="row" spacing={2}>
               <Button
